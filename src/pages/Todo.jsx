@@ -41,36 +41,34 @@ const Todo = () => {
     getTodos();
   }, []);
 
- const onSubmitForm = (e) => {
-   e.preventDefault();
+  const onSubmitForm = (e) => {
+    e.preventDefault();
 
-   if (!formData.title || !formData.desc) {
-     alert("All fields are required!");
-     return;
-   }
+    if (!formData.title || !formData.desc) {
+      alert("All fields are required!");
+      return;
+    }
 
-   const temp = {
-     title: formData.title,
-     desc: formData.desc,
-     completed: false,
-   };
+    const temp = {
+      title: formData.title.trim(),
+      desc: formData.desc.trim(),
+    };
 
-   console.log("Submitting Todo:", temp);
+    console.log("Submitting Todo:", temp);
 
-   axios
-     .post(`${API_URL}/todos`, temp)
-     .then((res) => {
-       console.log("Response:", res.data);
-       setTodoslist([...todoslist, res.data]);
-     })
-     .catch((err) => {
-       console.log( err.message);
-       alert("Failed to add todo. Please try again.");
-     });
+    axios
+      .post(`${API_URL}/todos`, temp)
+      .then((res) => {
+        console.log("Response:", res.data);
+        setTodoslist([...todoslist, res.data]);
+      })
+      .catch((err) => {
+        console.log("Error : ", err.message);
+        alert("Failed to add todo. Please try again.");
+      });
 
-   setFormData({ title: "", desc: "" });
- };
-
+    setFormData({ title: "", desc: "" });
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -99,18 +97,17 @@ const Todo = () => {
       }
     });
 
-    setTodoslist(updatedTodos); 
+    setTodoslist(updatedTodos);
 
     try {
       const updatedTodo = { completed: !completed };
-      await axios.put(`${API_URL}/todos/${id}`, updatedTodo); 
+      await axios.put(`${API_URL}/todos/${id}`, updatedTodo);
     } catch (error) {
       console.log("Error marking todo as complete:", error);
       setTodoslist(originalTodos);
       alert("Failed to update the todo. Please try again.");
     }
   };
-
 
   if (isLoading) {
     return <h1>Loading...</h1>;
