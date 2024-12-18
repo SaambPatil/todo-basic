@@ -41,25 +41,36 @@ const Todo = () => {
     getTodos();
   }, []);
 
-  const onSubmitForm = (e) => {
-    e.preventDefault();
-    if (!formData.title || !formData.desc) {
-      alert("All fields are required!");
-      return;
-    }
-    const temp = { title: formData.title, description: formData.desc };
+ const onSubmitForm = (e) => {
+   e.preventDefault();
 
-    // setTodoslist([...todoslist, res.data]);
-    axios
-      .post(`${API_URL}/todos`, temp)
-      .then((res) => {
-        // console.log(res.data);
-        setTodoslist([...todoslist, res.data]);
-      })
-      .catch((err) => console.log(err));
+   if (!formData.title || !formData.desc) {
+     alert("All fields are required!");
+     return;
+   }
 
-    setFormData({ title: "", desc: "" });
-  };
+   const temp = {
+     title: formData.title,
+     desc: formData.desc,
+     completed: false,
+   };
+
+   console.log("Submitting Todo:", temp);
+
+   axios
+     .post(`${API_URL}/todos`, temp)
+     .then((res) => {
+       console.log("Response:", res.data);
+       setTodoslist([...todoslist, res.data]);
+     })
+     .catch((err) => {
+       console.log( err.message);
+       alert("Failed to add todo. Please try again.");
+     });
+
+   setFormData({ title: "", desc: "" });
+ };
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
