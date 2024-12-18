@@ -67,31 +67,39 @@ const Todo = () => {
 
   const deleteTodo = async (id) => {
     console.log("Deleting todo with ID:", id);
+    const originalTodos = [...todoslist];
+    setTodoslist(todoslist.filter((todo) => todo.id !== id));
     try {
       await axios.delete(`${API_URL}/todos/${id}`);
-      setTodoslist(todoslist.filter((todo) => todo.id !== id));
     } catch (error) {
       console.log("Error deleting todo:", error);
+      setTodoslist(originalTodos);
+      alert("Failed to delete the todo. Please try again.");
     }
   };
 
   const markComplete = async (id, completed) => {
+    const originalTodos = [...todoslist];
+    const updatedTodos = todoslist.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, completed: !completed };
+      } else {
+        return todo;
+      }
+    });
+
+    setTodoslist(updatedTodos); 
+
     try {
       const updatedTodo = { completed: !completed };
-      await axios.patch(`${API_URL}/todos/${id}`, updatedTodo);
-      setTodoslist(
-        todoslist.map((todo) => {
-          if (todo.id === id) {
-            return { ...todo, completed: !todo.completed };
-          } else {
-            return todo;
-          }
-        })
-      );
+      await axios.put(`${API_URL}/todos/${id}`, updatedTodo); 
     } catch (error) {
       console.log("Error marking todo as complete:", error);
+      setTodoslist(originalTodos);
+      alert("Failed to update the todo. Please try again.");
     }
   };
+
 
   if (isLoading) {
     return <h1>Loading...</h1>;
