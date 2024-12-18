@@ -100,7 +100,7 @@ const Todo = () => {
     setTodoslist(updatedTodos);
 
     try {
-      const updatedTodo = { completed: !completed };
+      const updatedTodo = updatedTodos.find((todo) => todo.id === id);
       await axios.put(`${API_URL}/todos/${id}`, updatedTodo);
     } catch (error) {
       console.log("Error marking todo as complete:", error);
