@@ -51,7 +51,7 @@ const Todo = () => {
 
     const temp = {
       title: formData.title.trim(),
-      desc: formData.desc.trim(),
+      description: formData.desc.trim(),
     };
 
     console.log("Submitting Todo:", temp);
@@ -77,7 +77,7 @@ const Todo = () => {
   const deleteTodo = async (id) => {
     console.log("Deleting todo with ID:", id);
     const originalTodos = [...todoslist];
-    setTodoslist(todoslist.filter((todo) => todo.id !== id));
+    setTodoslist(todoslist.filter((todo) => todo._id !== id));
     try {
       await axios.delete(`${API_URL}/todos/${id}`);
     } catch (error) {
@@ -90,7 +90,7 @@ const Todo = () => {
   const markComplete = async (id, completed) => {
     const originalTodos = [...todoslist];
     const updatedTodos = todoslist.map((todo) => {
-      if (todo.id === id) {
+      if (todo._id === id) {
         return { ...todo, completed: !completed };
       } else {
         return todo;
@@ -100,8 +100,14 @@ const Todo = () => {
     setTodoslist(updatedTodos);
 
     try {
-      const updatedTodo = updatedTodos.find((todo) => todo.id === id);
-      await axios.put(`${API_URL}/todos/${id}`, updatedTodo);
+      const updatedTodo = updatedTodos.find((todo) => todo._id === id);
+      const temp = {
+        title: updatedTodo.title,
+        description: updatedTodo.description,
+        completed: updatedTodo.completed,
+      };
+      console.log(updatedTodo);
+      await axios.put(`${API_URL}/todos/${id}`, temp);
     } catch (error) {
       console.log("Error marking todo as complete:", error);
       setTodoslist(originalTodos);

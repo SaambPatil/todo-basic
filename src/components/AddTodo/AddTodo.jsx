@@ -1,7 +1,10 @@
 const AddTodo = ({ onSubmitForm, handleChange, formData }) => {
   return (
     <form onSubmit={onSubmitForm}>
-      <label>Enter Title: </label>
+      <br />
+
+      <label style={{ marginRight: "45px" }}>Enter Title: </label>
+      <br />
       <input
         type="text"
         name="title"
@@ -10,7 +13,10 @@ const AddTodo = ({ onSubmitForm, handleChange, formData }) => {
         value={formData.title}
       />
       <br />
+
       <label>Enter Description: </label>
+      <br />
+
       <input
         type="text"
         name="desc"
@@ -18,6 +24,8 @@ const AddTodo = ({ onSubmitForm, handleChange, formData }) => {
         onChange={handleChange}
         value={formData.desc}
       />
+
+      <br />
       <br />
       <button type="submit">Add Todo</button>
     </form>
